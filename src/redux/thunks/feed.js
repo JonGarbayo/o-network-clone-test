@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import posts from "../../data/Post.js"
+import { api } from "../../services/api"
 import comments from "../../data/Comment.js"
 import moment from 'moment'
 
-export const fetchPosts = createAsyncThunk("feed/fetchPosts", async (userIdUrl, thunkApi) => {
+/*export const fetchPosts = createAsyncThunk("feed/fetchPosts", async (userIdUrl, thunkApi) => {
     
     const stateUserOrganizationId = thunkApi.getState().user.organizationId;
 
@@ -20,6 +20,27 @@ export const fetchPosts = createAsyncThunk("feed/fetchPosts", async (userIdUrl, 
         
     } catch (error) {
         throw new Error("Une erreur s'est produite");
+    }
+});*/
+
+export const fetchPosts = createAsyncThunk("feed/fetchPosts", async (userIdUrl, thunkApi) => {
+    
+    try {
+        const id = thunkApi.getState().user.organizationId;
+        
+        // Si userIdUrl est défini, on filtre les posts pour l'utilisateur spécifique
+        if (userIdUrl) {
+            const { data } = await api.get(`/organizations/${id}/users/${userIdUrl}/posts`)
+            
+            return data;
+        } 
+        // Sinon, on renvoie tous les posts de l'organisation
+        const { data } = await api.get(`/organizations/${id}/posts`)
+        
+        return data;
+        
+    } catch (error) {
+        return thunkApi.rejectWithValue({status: 500, message: "Une erreur s'est produite"});
     }
 });
 

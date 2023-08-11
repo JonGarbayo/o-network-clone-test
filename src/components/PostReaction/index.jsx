@@ -2,7 +2,7 @@ import { useState } from 'react';
 import  PropTypes from 'prop-types';
 import './style.scss'
 import { useSelector } from 'react-redux';
-import { getPostReactions } from '../../redux/selectors/feed';
+//import { getPostReactions } from '../../redux/selectors/feed';
 import {getUserOrganizationId } from '../../redux/selectors/user'
 import { Box, Button } from '@mui/material';
 import { Popover, Typography } from '@mui/material';
@@ -11,6 +11,8 @@ import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
 import { useTheme } from '@mui/material/styles';
+// à supprimer quand on aura les réactions en back
+import postReactions from "../../data/Reaction"
 
 
 const SmallAvatar = styled(Avatar)(({ theme }) => ({
@@ -21,11 +23,13 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
 }));
 
 function PostReaction({postId}) {
-
+    console.log(postId)
     const theme = useTheme();
 
     const [anchorEl, setAnchorEl] = useState(null);
+    /*
     const postReactions = useSelector(getPostReactions(postId));
+    */
     const organizationId = useSelector(getUserOrganizationId)
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
